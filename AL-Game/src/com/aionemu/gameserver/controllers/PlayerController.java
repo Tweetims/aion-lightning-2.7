@@ -208,9 +208,8 @@ public class PlayerController extends CreatureController<Player> {
 		/**
 		 * Release summon
 		 */
-		Summon summon = player.getSummon();
-		if (summon != null)
-			summon.getController().release(UnsummonType.UNSPECIFIED);
+		Summon summons = player.getSummon();
+			summons.getController().release(UnsummonType.UNSPECIFIED);
 		
 		player.getController().cancelCurrentSkill();
 		boolean hasSelfRezEffect = getOwner().haveSelfRezEffect();
@@ -722,11 +721,28 @@ public class PlayerController extends CreatureController<Player> {
 			master.getSummon().setMaster(null);
 			master.setSummon(null);
 		}
-		Summon summon = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
-		master.setSummon(summon);
-		PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summon));
-		PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, EmotionType.START_EMOTE2));
-		PacketSendUtility.broadcastPacket(summon, new SM_SUMMON_UPDATE(summon));
+		Summon summons;
+		summons = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
+		master.setSummon(summons);
+		PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summons));
+		PacketSendUtility.broadcastPacket(summons, new SM_EMOTION(summons, EmotionType.START_EMOTE2));
+		PacketSendUtility.broadcastPacket(summons, new SM_SUMMON_UPDATE(summons));
+	}
+	
+	@Override
+	public void createSummons(int npcId, int skillId, int skillLevel, int count) {
+		Player master = getOwner();
+		if (master.getSummon() != null) {
+			master.getSummon().getController().delete();
+			master.getSummon().setMaster(null);
+			master.setSummon(null);
+		}
+		Summon summons;
+		summons = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
+		master.setSummon(summons);
+		PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summons));
+		PacketSendUtility.broadcastPacket(summons, new SM_EMOTION(summons, EmotionType.START_EMOTE2));
+		PacketSendUtility.broadcastPacket(summons, new SM_SUMMON_UPDATE(summons));
 	}
 
 	public boolean addItems(int itemId, int count) {

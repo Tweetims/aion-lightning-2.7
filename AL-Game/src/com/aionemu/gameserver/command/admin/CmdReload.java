@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 import com.aionemu.gameserver.ai2.AI2Engine;
 import com.aionemu.gameserver.command.BaseCommand;
 import com.aionemu.gameserver.command.CommandService;
+import com.aionemu.gameserver.configs.Config;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.dataholders.EventData;
 import com.aionemu.gameserver.dataholders.NpcDropData;
@@ -55,18 +56,14 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-
-
 public class CmdReload extends BaseCommand {
-	
-	
-	
+
 	private static final Logger log = LoggerFactory.getLogger(CmdReload.class);
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length < 1) {
 			showHelp(admin);
-			return ;
+			return;
 		}
 		if (params[0].equals("quest")) {
 			File xml = new File("./data/static_data/quest_data/quest_data.xml");
@@ -88,16 +85,13 @@ public class CmdReload extends BaseCommand {
 							questScriptsData.getQuest().addAll(data.getQuest());
 				}
 				QuestEngine.getInstance().load();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				PacketSendUtility.sendMessage(admin, "Quest reload failed!");
 				log.error("quest reload fail", e);
-			}
-			finally {
+			} finally {
 				PacketSendUtility.sendMessage(admin, "Quest reload Success!");
 			}
-		}
-		else if (params[0].equals("skill")) {
+		} else if (params[0].equals("skill")) {
 			File dir = new File("./data/static_data/skills");
 			try {
 				JAXBContext jc = JAXBContext.newInstance(StaticData.class);
@@ -111,16 +105,13 @@ public class CmdReload extends BaseCommand {
 				}
 				DataManager.SKILL_DATA.setSkillTemplates(newTemplates);
 				DataManager.SKILL_DATA.initializeCooldownGroups();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				PacketSendUtility.sendMessage(admin, "Skill reload failed!");
 				log.error("Skill reload failed!", e);
-			}
-			finally {
+			} finally {
 				PacketSendUtility.sendMessage(admin, "Skill reload Success!");
 			}
-		}
-		else if (params[0].equals("portal")) {
+		} else if (params[0].equals("portal")) {
 			File dir = new File("./data/static_data/portals");
 			try {
 				JAXBContext jc = JAXBContext.newInstance(StaticData.class);
@@ -133,33 +124,28 @@ public class CmdReload extends BaseCommand {
 						newTemplates.addAll(data.getPortals());
 				}
 				DataManager.PORTAL_DATA.setPortals(newTemplates);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				PacketSendUtility.sendMessage(admin, "Portal reload failed!");
 				log.error("Portal reload failed!", e);
-			}
-			finally {
+			} finally {
 				PacketSendUtility.sendMessage(admin, "Portal reload Success!");
 			}
-		}
-		else if (params[0].equalsIgnoreCase("command")) {
+		} else if (params[0].equalsIgnoreCase("command")) {
 			if (params.length == 2 && params[1].equalsIgnoreCase("alias")) {
 				CommandService.getInstance().loadAlias();
 				PacketSendUtility.sendMessage(admin, "Rechargement Alias commandes.");
-			}
-			else {
+			} else {
 				CommandService.getInstance().loadSecurity();
 				PacketSendUtility.sendMessage(admin, "Rechargement commandes.");
 			}
-		}
-		else if (params[0].equalsIgnoreCase("spawn")) {
+		} else if (params[0].equalsIgnoreCase("spawn")) {
 			int worldId = 0;
 			if (params.length == 2)
 				worldId = admin.getWorldId();
 
 			final int worldIdFinal = worldId;
 			// despawn all
-			
+
 			World.getInstance().doOnAllObjects(new Visitor<VisibleObject>() {
 
 				@Override
@@ -175,12 +161,10 @@ public class CmdReload extends BaseCommand {
 				SpawnEngine.spawnAll();
 			else
 				SpawnEngine.spawnWorldMap(worldId);
-		}
-		else if (params[0].equals("drop")) {
+		} else if (params[0].equals("drop")) {
 
 			DataManager.NPC_DATA.getNpcData().forEachValue(new TObjectProcedure<NpcTemplate>() {
 
-		
 				public boolean execute(NpcTemplate object) {
 					object.setNpcDrop(null);
 					return true;
@@ -201,30 +185,24 @@ public class CmdReload extends BaseCommand {
 				}
 				DataManager.NPC_DROP_DATA.setNpcDrop(npcDrop);
 				DropRegistrationService.getInstance().init();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new Error("Drop reload failed!", e);
-			}
-			finally {
+			} finally {
 				PacketSendUtility.sendMessage(admin, "Drop reload Success!");
 			}
-		}
-		else if (params[0].equals("gameshop")) {
+		} else if (params[0].equals("gameshop")) {
 			InGameShopEn.getInstance().reload();
 			PacketSendUtility.sendMessage(admin, "Gameshop successfully reloaded!");
-		}
-	else if (params[0].equals("ai2")){
-	
-	        try {
-                    AI2Engine.getInstance().reload();
-                    PacketSendUtility.sendMessage(admin, "AI2 Engine reloaded successfully!");
-                } catch (Exception e) {
-                    PacketSendUtility.sendMessage(admin, "AI2 Engine failed to reload! Keeping last version ...");
-                }
-           
-	
-	}
-		else if (params[0].equals("events")) {
+		} else if (params[0].equals("ai2")) {
+
+			try {
+				AI2Engine.getInstance().reload();
+				PacketSendUtility.sendMessage(admin, "AI2 Engine reloaded successfully!");
+			} catch (Exception e) {
+				PacketSendUtility.sendMessage(admin, "AI2 Engine failed to reload! Keeping last version ...");
+			}
+
+		} else if (params[0].equals("events")) {
 			File eventXml = new File("./data/static_data/events_config/events_config.xml");
 			EventData data = null;
 			try {
@@ -233,8 +211,7 @@ public class CmdReload extends BaseCommand {
 				un.setEventHandler(new XmlValidationHandler());
 				un.setSchema(getSchema("./data/static_data/static_data.xsd"));
 				data = (EventData) un.unmarshal(eventXml);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				PacketSendUtility.sendMessage(admin, "Event reload failed! Keeping the last version ...");
 				log.error("Event reload failed!", e);
 				return;
@@ -248,10 +225,18 @@ public class CmdReload extends BaseCommand {
 				PacketSendUtility.sendMessage(admin, "Active events: " + text);
 				EventService.getInstance().start();
 			}
-		}
-		else
+		} else if (params[0].equals("config")) {
+
+			try {
+				Config.load();
+				PacketSendUtility.sendMessage(admin, "Config reloaded successfully!");
+			} catch (Exception e) {
+				PacketSendUtility.sendMessage(admin, "Config failed to reload!");
+			}
+		} else
 			showHelp(admin);
-				//"syntax //reload <quest | skill | portal | spawn | commands | drop | gameshop | events>");
+		// "syntax //reload <quest | skill | portal | spawn | commands | drop | gameshop
+		// | events>");
 
 	}
 
@@ -261,8 +246,7 @@ public class CmdReload extends BaseCommand {
 
 		try {
 			schema = sf.newSchema(new File(xml_schema));
-		}
-		catch (SAXException saxe) {
+		} catch (SAXException saxe) {
 			throw new Error("Error while getting schema", saxe);
 		}
 
@@ -272,6 +256,8 @@ public class CmdReload extends BaseCommand {
 	private Collection<File> listFiles(File root, boolean recursive) {
 		IOFileFilter dirFilter = recursive ? makeSVNAware(HiddenFileFilter.VISIBLE) : null;
 
-		return FileUtils.listFiles(root, and(and(notFileFilter(prefixFileFilter("new")), suffixFileFilter(".xml")), HiddenFileFilter.VISIBLE), dirFilter);
+		return FileUtils.listFiles(root,
+				and(and(notFileFilter(prefixFileFilter("new")), suffixFileFilter(".xml")), HiddenFileFilter.VISIBLE),
+				dirFilter);
 	}
 }

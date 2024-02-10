@@ -381,9 +381,9 @@ public class EnchantService {
 		
 		int addLevel = 1;
 		int rnd = Rnd.get(100); //crit modifier
-		if (rnd < 2)
+		if (rnd < 20)
 			addLevel = 3;
-		else if (rnd < 7)
+		else if (rnd < 70)
 			addLevel = 2;
 		
 		if (!player.getInventory().decreaseByObjectId(parentItem.getObjectId(), 1)) {

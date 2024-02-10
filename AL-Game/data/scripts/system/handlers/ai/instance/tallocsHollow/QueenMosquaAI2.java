@@ -71,12 +71,20 @@ public class QueenMosquaAI2 extends SummonerAI2 {
 				public void visit(Player player) {
 					PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1400476));
 					Summon summon = player.getSummon();
-					if (summon != null) {
-						if (summon.getNpcId() == 799500 || summon.getNpcId() == 799501) {
-							summon.getController().release(UnsummonType.UNSPECIFIED);
-							PacketSendUtility.sendPacket(player, new SM_PLAY_MOVIE(0, 435));
+					if (summon.getNpcId() == 799500 || summon.getNpcId() == 799501) {
+						summon.getController().release(UnsummonType.UNSPECIFIED);
+						PacketSendUtility.sendPacket(player, new SM_PLAY_MOVIE(0, 435));
+					}
+					/*
+					if (summons != null) {
+						for (Summon summon: summons) {
+							if (summon.getNpcId() == 799500 || summon.getNpcId() == 799501) {
+								summon.getController().release(UnsummonType.UNSPECIFIED);
+								PacketSendUtility.sendPacket(player, new SM_PLAY_MOVIE(0, 435));
+							}
 						}
 					}
+					*/
 				}
 			});
 		}

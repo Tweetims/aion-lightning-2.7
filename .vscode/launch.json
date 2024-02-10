@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build Login",
+            "type": "node-terminal",
+            "command": "java -classpath \"C:\\Users\\chris\\Documents\\git\\Aion\\Server\\aion-lightning-2.7\\aion-lightning-2.7\\Tools\\Ant\\lib\\ant-launcher.jar\" \"-Dant.home=C:\\Users\\chris\\Documents\\git\\Aion\\Server\\aion-lightning-2.7\\aion-lightning-2.7\\Tools\\Ant\" org.apache.tools.ant.launch.Launcher",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\AL-Login"
+        },{
+            "name": "Login",
+            "type": "node-terminal",
+            "command": "java",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\AL-Login"
+        },
+        {
+            "type": "java",
+            "name": "ChatServer",
+            "request": "launch",
+            "mainClass": "com.aionemu.chatserver.ChatServer",
+            "projectName": "AL-Chat"
+        },
+        {
+            "type": "java",
+            "name": "LoginServer",
+            "request": "launch",
+            "mainClass": "com.aionlightning.loginserver.LoginServer",
+            "projectName": "AL-Login"
+        },
+        {
+            "type": "java",
+            "name": "GameServer",
+            "request": "launch",
+            "mainClass": "com.aionemu.gameserver.GameServer",
+            "projectName": "Aion Lightning 2.7"
+        },
+        {
+            "type": "java",
+            "name": "Eigen3f",
+            "request": "launch",
+            "mainClass": "com.aionemu.gameserver.geoEngine.math.Eigen3f",
+            "projectName": "Aion Lightning 2.7"
+        },
+        {
+            "type": "java",
+            "name": "SchemaGen",
+            "request": "launch",
+            "mainClass": "com.aionemu.gameserver.utils.xml.SchemaGen",
+            "projectName": "Aion Lightning 2.7"
+        }
+    ]
+}

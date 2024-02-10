@@ -524,6 +524,10 @@ public abstract class CreatureController<T extends Creature> extends VisibleObje
 	public void createSummon(int npcId, int skillId, int skillLevel) {
 		// TODO Auto-generated method stub
 	}
+	
+	public void createSummons(int npcId, int skillId, int skillLevel, int count) {
+		
+	}
 
 	public void setIsUnderShield(boolean value) {
 		this.isUnderShield = value;

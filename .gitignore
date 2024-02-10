@@ -11,3 +11,6 @@ build/
 
 **/.log
 **/.zip
+**/log
+**/.metadata
+**/cache

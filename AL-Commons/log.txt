@@ -1,0 +1,20 @@
+
+       [javac] warning: [options] bootstrap class path not set in conjunction with -source 6
+       [javac] error: Source option 6 is no longer supported. Use 7 or later.
+       [javac] error: Target option 6 is no longer supported. Use 7 or later.
+
+BUILD FAILED
+C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Game\build.xml:31: Compile failed; see the compiler error output for details.
+
+Buildfile: C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Game\build.xml
+
+clean:
+      [delete] Deleting directory C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Commons\build
+
+init:
+       [mkdir] Created dir: C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Commons\build
+       [mkdir] Created dir: C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Commons\build\Classes
+
+compile:
+       [javac] Compiling 140 source files to C:\Users\chris\Documents\git\Aion\Server\aion-lightning-2.7\aion-lightning-2.7\AL-Commons\build\Classes
+Total time: 170 milliseconds

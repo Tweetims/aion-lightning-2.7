@@ -23,14 +23,14 @@ import com.aionemu.gameserver.utils.audit.AuditLogger;
 public class CommandService {
 	private static final Logger log = LoggerFactory.getLogger("CommandService.class");
 	private static final CommandService instance = new CommandService();
-	
+
 	private Map<String, BaseCommand> commands;
 	private Map<String, BaseCommand> commandAlias;
-	
-	public CommandService () {
+
+	public CommandService() {
 		commands = new HashMap<String, BaseCommand>();
 		commandAlias = new HashMap<String, BaseCommand>();
-		
+
 		/* ### ADMIN ### */
 		commands.put("add", new CmdAdd());
 		commands.put("addcube", new CmdAddCube());
@@ -45,7 +45,7 @@ public class CommandService {
 		commands.put("announce", new CmdAnnounce());
 		commands.put("announcement", new CmdAnnouncement());
 		commands.put("appearance", new CmdAppearance());
-		commands.put("assault", new CmdAssault());	
+		commands.put("assault", new CmdAssault());
 		commands.put("ban", new CmdBan());
 		commands.put("bk", new CmdBk());
 		commands.put("changerace", new CmdChangeRace());
@@ -62,6 +62,7 @@ public class CommandService {
 		commands.put("enemy", new CmdEnemy());
 		commands.put("equip", new CmdEquip());
 		commands.put("energybuff", new CmdEnergyBuff());
+		commands.put("fly", new CmdFly());
 		commands.put("fsc", new CmdFsc());
 		commands.put("gag", new CmdGag());
 		commands.put("gm", new CmdGm());
@@ -171,215 +172,202 @@ public class CommandService {
 		commands.put("reskin", new CmdReskin());
 		commands.put("shop", new CmdShop()); // Warning! Requires additional table. See sql/updates/addWebShop.sql
 		commands.put("toll", new CmdToll());
-//		commands.put("Tvt2", new CmdTvt2());
+		// commands.put("Tvt2", new CmdTvt2());
 		commands.put("find", new CmdFind());
-		
-		//EventEngine
-		
+
+		// EventEngine
+
 		commands.put("event", new CmdEvent());
 		commands.put("join", new CmdJoin());
-		//commands.put("male", new CmdMale());
+		// commands.put("male", new CmdMale());
 		commands.put("rank", new CmdCustomRank());
 		loadSecurity();
 		loadAlias();
 	}
-	
-	public void loadSecurity () {
+
+	public void loadSecurity() {
 		Connection con = null;
 		try {
-	    	con = DatabaseFactory.getConnection();
-	        PreparedStatement stmt = con.prepareStatement("SELECT * FROM command ORDER BY name");
+			con = DatabaseFactory.getConnection();
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM command ORDER BY name");
 
-	        ResultSet resultSet = stmt.executeQuery();
-	        while (resultSet.next()) {
-	        	String[] params = resultSet.getString("name").split(" ");
-	    		BaseCommand load = commands.get(params[0]);
-	    		for (int i = 1; i < params.length; i++) {
-	    			if (load != null) {
-	    				BaseCommand subLoad = load.getSubCommand(params[i].toLowerCase());
-	    				if (subLoad != null)
-	    					load = subLoad;
-	    				else
-	    					break;
-	    			}
-	    			else
-	    				break;
-	    		}
-	        	if (load != null) {
-	        		load.setSecurity(resultSet.getInt("security"));
-	        		load.setHelp(resultSet.getString("help"));
-	        	}
-	        	else
-	        		log.error("Command " + resultSet.getString("name") + " Introuvable.");
-	        }
-	        
-	        resultSet.close();
-	        stmt.close();
-	    }
-	    catch (SQLException e) { 
-	    	log.error("Load 'command' Fail", e);
-	    }
-	    finally {
-	    	DatabaseFactory.close(con);
-	    }
+			ResultSet resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				String[] params = resultSet.getString("name").split(" ");
+				BaseCommand load = commands.get(params[0]);
+				for (int i = 1; i < params.length; i++) {
+					if (load != null) {
+						BaseCommand subLoad = load.getSubCommand(params[i].toLowerCase());
+						if (subLoad != null)
+							load = subLoad;
+						else
+							break;
+					} else
+						break;
+				}
+				if (load != null) {
+					load.setSecurity(resultSet.getInt("security"));
+					load.setHelp(resultSet.getString("help"));
+				} else
+					log.error("Command " + resultSet.getString("name") + " Inaccessible.");
+			}
+
+			resultSet.close();
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Load 'command' Fail", e);
+		} finally {
+			DatabaseFactory.close(con);
+		}
 	}
-	
+
 	public void loadAlias() {
 		Connection con = null;
 		try {
-	    	con = DatabaseFactory.getConnection();
-	        PreparedStatement stmt = con.prepareStatement("SELECT * FROM command_alias ORDER BY alias");
+			con = DatabaseFactory.getConnection();
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM command_alias ORDER BY alias");
 
-	        ResultSet resultSet = stmt.executeQuery();
-	        while (resultSet.next()) {
-	        	String[] params = resultSet.getString("name").split(" ");
-	    		BaseCommand load = commands.get(params[0]);
-	    		for (int i = 1; i < params.length; i++) {
-	    			if (load != null) {
-	    				BaseCommand subLoad = load.getSubCommand(params[i].toLowerCase());
-	    				if (subLoad != null)
-	    					load = subLoad;
-	    				else
-	    					break;
-	    			}
-	    			else
-	    				break;
-	    		}
-	        	if (load != null)
-	        		commandAlias.put(resultSet.getString("alias"), load);
-	        	else
-	        		log.error("Command (alias) " + resultSet.getString("name") + " Introuvable.");
-	        }
-	        
-	        resultSet.close();
-	        stmt.close();
-	    }
-	    catch (SQLException e) { 
-	    	log.error("Load 'command' Fail", e);
-	    }
-	    finally {
-	    	DatabaseFactory.close(con);
-	    }
+			ResultSet resultSet = stmt.executeQuery();
+			while (resultSet.next()) {
+				String[] params = resultSet.getString("name").split(" ");
+				BaseCommand load = commands.get(params[0]);
+				for (int i = 1; i < params.length; i++) {
+					if (load != null) {
+						BaseCommand subLoad = load.getSubCommand(params[i].toLowerCase());
+						if (subLoad != null)
+							load = subLoad;
+						else
+							break;
+					} else
+						break;
+				}
+				if (load != null)
+					commandAlias.put(resultSet.getString("alias"), load);
+				else
+					log.error("Command (alias) " + resultSet.getString("name") + " Inaccessible.");
+			}
+
+			resultSet.close();
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Load 'command' Fail", e);
+		} finally {
+			DatabaseFactory.close(con);
+		}
 	}
-	
-	public void process (Player player, String command, boolean admin) {
+
+	public void process(Player player, String command, boolean admin) {
 		if (player.isInPrison()) {
-			PacketSendUtility.sendMessage(player, "Vous etes en prison.");
-			return ;
+			PacketSendUtility.sendMessage(player, "You are in prison.");
+			return;
 		}
 		String[] params = command.split(" ");
 		BaseCommand myCommand = commands.get(params[0]);
 		if (myCommand == null)
 			myCommand = commandAlias.get(params[0]);
-		
+
 		int needToRemove = 0;
-		
+
 		for (int i = 1; i < params.length; i++) {
 			if (myCommand != null) {
 				BaseCommand subCmd = myCommand.getSubCommand(params[i].toLowerCase());
 				if (subCmd != null) {
 					myCommand = subCmd;
 					needToRemove = i;
-				}
-				else
+				} else
 					break;
-			}
-			else
+			} else
 				break;
 		}
-		
+
 		if (myCommand != null) {
 			if (player.getAccessLevel() == 0 && admin) {
-				PacketSendUtility.sendMessage(player, "commande introuvable.");
-				return ;
+				PacketSendUtility.sendMessage(player, "Command Inaccessible.");
+				return;
 			}
 			if (myCommand.haveAccess(player)) {
 				if (LoggingConfig.LOG_GMAUDIT)
 					AuditLogger.auditCmd(player, player.getTarget(), command);
-				
+
 				myCommand.execute(player, RemoveFirstsParam(params, needToRemove));
-			}
-			else
-				PacketSendUtility.sendMessage(player, "Pas de permission");
-		}
-		else
-			PacketSendUtility.sendMessage(player, "commande introuvable.");
+			} else
+				PacketSendUtility.sendMessage(player, "Insufficient Permissions");
+		} else
+			PacketSendUtility.sendMessage(player, "Command Inaccessible.");
 	}
-	
+
 	public String getCommandList(Player player) {
 		String title = "";
 		String keyCmd = ".";
 		if (player.getAccessLevel() == 0) {
-			title = "Commands Joueur";
+			title = "Player Commands";
 			keyCmd = ".";
-		}
-		else {
-			title = "Commands Admin";
+		} else {
+			title = "Admin Commands";
 			keyCmd = "//";
 		}
-		
+
 		String html = "<poll>" +
-		"<poll_introduction>" +
-		"	<![CDATA[<font color='4CB1E5'>" + title + "</font>]]>" +
-		"</poll_introduction>" +
-		"<poll_title>" +
-		"	<font color='ffc519'></font>" +
-		"</poll_title>" +
-		"<questions>" +
-		"	<question>" +
-		"		<title>" +
-		"			<![CDATA[";
-		
+				"<poll_introduction>" +
+				"	<![CDATA[<font color='4CB1E5'>" + title + "</font>]]>" +
+				"</poll_introduction>" +
+				"<poll_title>" +
+				"	<font color='ffc519'></font>" +
+				"</poll_title>" +
+				"<questions>" +
+				"	<question>" +
+				"		<title>" +
+				"			<![CDATA[";
+
 		for (Entry<String, BaseCommand> cmd : commands.entrySet()) {
 			String commandName = cmd.getKey();
 			BaseCommand command = cmd.getValue();
-			
+
 			if (command.getSecurity() <= player.getAccessLevel())
 				html += keyCmd + commandName + ":" + command.getHelp() + "<br>";
 		}
-		
+
 		html += "		]]>" +
-		"			</title>" +
-		"			<select>" +
-		"				<input type='radio'>Close the window</input>" +
-		"			</select>" +
-		"		</question>" +
-		"	</questions>" +
-		"</poll>";
-		
+				"			</title>" +
+				"			<select>" +
+				"				<input type='radio'>Close the window</input>" +
+				"			</select>" +
+				"		</question>" +
+				"	</questions>" +
+				"</poll>";
+
 		return html;
 	}
-	
+
 	public String getCommandListMsg(Player player) {
 		String title = "";
 		String keyCmd = ".";
 		if (player.getAccessLevel() == 0) {
-			title = "--Commandes Joueur--";
+			title = "--Player Commands--";
 			keyCmd = ".";
-		}
-		else {
-			title = "--Commandes Admin---";
+		} else {
+			title = "--Admin Commands---";
 			keyCmd = "//";
 		}
-		
+
 		String msg = "--------------------\n";
 		msg += title + "\n";
 		msg += "--------------------\n";
-		
+
 		for (Entry<String, BaseCommand> cmd : commands.entrySet()) {
 			String commandName = cmd.getKey();
 			BaseCommand command = cmd.getValue();
-			
+
 			if (command.getSecurity() <= player.getAccessLevel())
 				msg += keyCmd + commandName + " : " + command.getHelp() + "\n";
 		}
 		msg += "--------------------\n";
 		return msg;
 	}
-	
-	public String getHelpFromCommand(Player player, String [] params) {
+
+	public String getHelpFromCommand(Player player, String[] params) {
 		BaseCommand myCommand = commands.get(params[0]);
-		
+
 		for (int i = 1; i < params.length; i++) {
 			if (myCommand != null) {
 				BaseCommand subCmd = myCommand.getSubCommand(params[i].toLowerCase());
@@ -387,32 +375,30 @@ public class CommandService {
 					myCommand = subCmd;
 				else
 					break;
-			}
-			else
+			} else
 				break;
 		}
-		
+
 		if (myCommand != null) {
 			if (myCommand.haveAccess(player))
 				return myCommand.getHelp();
 			else
-				return "Commande introuvable.";
-		}
-		else
-			return "Commande introuvable.";
+				return "Command Inaccessible.";
+		} else
+			return "Command Inaccessible.";
 	}
-	
-	public static CommandService getInstance () {
+
+	public static CommandService getInstance() {
 		return instance;
 	}
-	
-	private static String [] RemoveFirstsParam (String [] params, int needToRemove) {
+
+	private static String[] RemoveFirstsParam(String[] params, int needToRemove) {
 		int newMax = params.length - 1 - needToRemove;
-		String [] newParams = new String[newMax];
-		
+		String[] newParams = new String[newMax];
+
 		for (int i = 0; i < newMax; i++)
-			newParams[i] = params[i+1+needToRemove];
-		
+			newParams[i] = params[i + 1 + needToRemove];
+
 		return newParams;
 	}
 }

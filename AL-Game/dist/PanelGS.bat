@@ -1,7 +1,6 @@
 @ECHO off
 TITLE Aion Ascension - Game Server Console
 :MENU
-color F0
 CLS
 ECHO.
 ECHO   ^*--------------------------------------------------------------------------^*
@@ -28,7 +27,7 @@ CALL StartGS.bat
 )
 IF %OPTION% == 3 (
 SET MODE=PRODUCTION X2
-SET JAVA_OPTS=-Xms3072m -Xmx3072m -server
+SET JAVA_OPTS=-Xms8192m -Xmx8192m -server
 CALL StartGS.bat
 )
 IF %OPTION% == 4 (

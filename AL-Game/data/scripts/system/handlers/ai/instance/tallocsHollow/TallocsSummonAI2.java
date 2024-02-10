@@ -44,14 +44,16 @@ public class TallocsSummonAI2 extends NpcAI2 {
 				return true;
 			}
 
+			Summon[] summons = new Summon[1];
 			Summon summon = new Summon(getObjectId(), new SummonController(), getSpawnTemplate(), getObjectTemplate(), getObjectTemplate().getLevel());
-			player.setSummon(summon);
+			player.setSummon(summons[0]);
 			summon.setMaster(player);
 			summon.setTarget(player.getTarget());
 			summon.setKnownlist(getKnownList());
 			summon.setEffectController(new EffectController(summon));
 			summon.setPosition(getPosition());
 			summon.setLifeStats(getLifeStats());
+			summons[0] = summon;
 			PacketSendUtility.sendPacket(player, new SM_TRANSFORM_IN_SUMMON(player, getObjectId()));
 			PacketSendUtility.sendPacket(player, new SM_CUSTOM_SETTINGS(getObjectId(), 0, 38, 0));
 			isTransformed = true;

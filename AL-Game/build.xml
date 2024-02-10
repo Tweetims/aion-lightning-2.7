@@ -3,7 +3,7 @@
 
 	<description> </description>
 
-	<property name="jre" location="${java.home}/libs" />
+	<property name="jre" location="C:/Program Files/Java/jre6/libs" />
 	<property name="src" location="src" />
 	<property name="config" location="config" />
 	<property name="libs" location="libs" />

@@ -6,7 +6,7 @@ IF "%MODE%" == "" (
 CALL PanelGS.bat
 )
 ECHO Starting Aion Lightning Game Server in %MODE% mode.
-C:\glassfish3\jdk\bin\java.exe %JAVA_OPTS% -ea -javaagent:./libs/al-commons-1.3.jar -cp ./libs/*;AL-Game.jar com.aionemu.gameserver.GameServer
+java %JAVA_OPTS% -ea -javaagent:./libs/al-commons-1.3.jar -cp ./libs/*;AL-Game.jar com.aionemu.gameserver.GameServer
 SET CLASSPATH=%OLDCLASSPATH%
 IF ERRORLEVEL 2 GOTO START
 IF ERRORLEVEL 1 GOTO ERROR

@@ -10,17 +10,14 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.Util;
 import com.aionemu.gameserver.world.World;
 
-
 /*syntax //addset <player> <itemset ID>
  syntax //addset <itemset ID>") */
-
 
 /**
  * @author Antivirus
  */
 public class CmdAddSet extends BaseCommand {
 
-		
 	public void execute(Player admin, String... params) {
 		if (params.length == 0 || params.length > 2) {
 			showHelp(admin);
@@ -29,22 +26,21 @@ public class CmdAddSet extends BaseCommand {
 
 		int itemSetId = ParseInteger(params[0]);
 		Player receiver = null;
-		
+
 		if (itemSetId == 0) {
 			if (params.length != 2) {
 				showHelp(admin);
 				return;
 			}
-			
+
 			receiver = World.getInstance().findPlayer(Util.convertName(params[0]));
 			if (receiver == null) {
-				PacketSendUtility.sendMessage(admin, "joueur introuvable.");
+				PacketSendUtility.sendMessage(admin, "joueur Inaccessible.");
 				return;
 			}
-			
+
 			itemSetId = ParseInteger(params[1]);
-		}
-		else
+		} else
 			receiver = AutoTarget(admin, false);
 
 		ItemSetTemplate itemSet = DataManager.ITEM_SET_DATA.getItemSetTemplate(itemSetId);
@@ -54,7 +50,8 @@ public class CmdAddSet extends BaseCommand {
 		}
 
 		if (receiver.getInventory().getFreeSlots() < itemSet.getItempart().size()) {
-			PacketSendUtility.sendMessage(admin, "Inventory needs at least " + itemSet.getItempart().size() + " free slots.");
+			PacketSendUtility.sendMessage(admin,
+					"Inventory needs at least " + itemSet.getItempart().size() + " free slots.");
 			return;
 		}
 

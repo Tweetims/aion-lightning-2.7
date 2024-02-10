@@ -32,11 +32,11 @@
 		<xs:attribute name="skilltype" type="skillType" use="required"/>
 		<xs:attribute name="attacktype" type="attackType"/>
 		<xs:attribute name="skillsubtype" type="skillSubType" use="required"/>
-		<xs:attribute name="conflict_id" type="xs:int" />
+		<xs:attribute name="conflict_id" type="xs:int"/>
 		<xs:attribute name="tslot" type="TargetSlot"/>
 		<xs:attribute name="tslot_level" use="optional" type="xs:int" default="0"/>
 		<xs:attribute name="dispel_category" type="DispelCategoryType" use="optional" default="NONE"/>
-		<xs:attribute name="req_dispel_level" type="xs:int" use="optional" />
+		<xs:attribute name="req_dispel_level" type="xs:int" use="optional"/>
 		<xs:attribute name="activation" type="activationAttribute" use="required"/>
 		<xs:attribute name="stigma" type="StigmaType"/>
 		<xs:attribute name="ammospeed" type="xs:int"/>
@@ -186,6 +186,7 @@
 			<xs:element name="summontotem" type="SummonTotemEffect" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="boostspellattack" type="BoostSpellAttackEffect" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="switchhostile" type="SwitchHostileEffect" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="summonmulti" type="SummonMultiEffect" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Properties">
@@ -216,7 +217,7 @@
 	</xs:complexType>
 	<xs:complexType name="Motion">
 		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="speed" type="xs:int" use="optional" default="100" />
+		<xs:attribute name="speed" type="xs:int" use="optional" default="100"/>
 		<xs:attribute name="instant_skill" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ActionModifiers">
@@ -234,8 +235,8 @@
 			<xs:element name="subeffect" type="SubEffect" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="modifiers" type="ActionModifiers" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="change" type="Change" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="conditions" type="Conditions"	minOccurs="0" maxOccurs="1"/>
-			<xs:element name="subconditions" type="Conditions"	minOccurs="0" maxOccurs="1"/>
+			<xs:element name="conditions" type="Conditions" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="subconditions" type="Conditions" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 		<xs:attribute name="hopa" type="xs:int"/>
 		<xs:attribute name="hopb" type="xs:int"/>
@@ -245,11 +246,9 @@
 		<xs:attribute name="critprobmod2" type="xs:int"/>
 		<xs:attribute name="preeffect_prob" type="xs:int"/>
 		<xs:attribute name="preeffect" type="xs:string"/>
-    <xs:attribute name="element" type="SkillElement"/>
-		<xs:attribute name="hittypeprob2" type="xs:int" use="optional"
-			default="100"/>
-		<xs:attribute name="hittype" type="HitType" use="optional"
-			default="EVERYHIT"/>
+		<xs:attribute name="element" type="SkillElement"/>
+		<xs:attribute name="hittypeprob2" type="xs:int" use="optional" default="100"/>
+		<xs:attribute name="hittype" type="HitType" use="optional" default="EVERYHIT"/>
 		<xs:attribute name="mrresist" type="xs:boolean" default="true"/>
 		<xs:attribute name="accmod1" type="xs:int"/>
 		<xs:attribute name="accmod2" type="xs:int"/>
@@ -258,7 +257,7 @@
 		<xs:attribute name="e" type="xs:int"/>
 		<xs:attribute name="effectid" type="xs:int"/>
 		<xs:attribute name="randomtime" type="xs:int"/>
-    <xs:attribute name="duration" type="xs:int"/>
+		<xs:attribute name="duration" type="xs:int"/>
 		<xs:attribute name="onfly" type="xs:boolean" default="false"/>
 		<xs:attribute name="delta" type="xs:int"/>
 		<xs:attribute name="value" type="xs:int"/>
@@ -269,7 +268,7 @@
 		<xs:attribute name="delta" type="xs:int"/>
 	</xs:complexType>
 	<xs:complexType name="SubEffect">
-		<xs:attribute name="skill_id" type="skillId" use="required" />
+		<xs:attribute name="skill_id" type="skillId" use="required"/>
 		<xs:attribute name="chance" type="xs:int"/>
 	</xs:complexType>
 	<!-- ACTIONS -->
@@ -351,14 +350,14 @@
 	</xs:complexType>
 	<!-- EFFECTS -->
 	<xs:complexType name="AbstractOverTimeEffect" abstract="true">
-    <xs:complexContent>
-      <xs:extension base="Effect">
-        <xs:attribute name="checktime" type="xs:int"/>
-        <xs:attribute name="percent" type="xs:boolean" default="false"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="HideEffect">
+		<xs:complexContent>
+			<xs:extension base="Effect">
+				<xs:attribute name="checktime" type="xs:int"/>
+				<xs:attribute name="percent" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HideEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
 				<xs:attribute name="bufcount" type="xs:int"/>
@@ -372,22 +371,10 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="DispelEffect">
-		<xs:complexContent>
-			<xs:extension base="Effect">
-				<xs:sequence minOccurs="0" maxOccurs="1">
-					<xs:element name="effectids" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="effecttype" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="slottype" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-				</xs:sequence>
-				<xs:attribute name="dispeltype" type="DispelType"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
 	<xs:complexType name="RootEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-			 <xs:attribute name="resistchance" type="xs:int"/>
+				<xs:attribute name="resistchance" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -448,9 +435,9 @@
 				<xs:attribute name="percent" type="xs:boolean"/>
 				<xs:attribute name="hitdelta" type="xs:int"/>
 				<xs:attribute name="hitvalue" type="xs:int"/>
-        <xs:attribute name="radius" type="xs:int"/>
-        <xs:attribute name="minradius" type="xs:int"/>
-        <xs:attribute name="condrace" type="SkillTargetRace"/>
+				<xs:attribute name="radius" type="xs:int"/>
+				<xs:attribute name="minradius" type="xs:int"/>
+				<xs:attribute name="condrace" type="SkillTargetRace"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -466,7 +453,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-		<xs:complexType name="ProvokerEffect">
+	<xs:complexType name="ProvokerEffect">
 		<xs:complexContent>
 			<xs:extension base="ShieldEffect">
 				<xs:attribute name="provoke_target" type="ProvokeTarget"/>
@@ -629,7 +616,7 @@
 	<xs:complexType name="DamageEffect" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-			 <xs:attribute name="mode" type="StatFunc"/>
+				<xs:attribute name="mode" type="StatFunc"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -662,7 +649,7 @@
 		<xs:complexContent>
 			<xs:extension base="DamageEffect">
 				<xs:attribute name="prob" type="xs:int"/>
-        <xs:attribute name="signetlvlstart" type="xs:int"/>
+				<xs:attribute name="signetlvlstart" type="xs:int"/>
 				<xs:attribute name="signetlvl" type="xs:int" use="required"/>
 				<xs:attribute name="signetid" type="xs:int" use="required"/>
 				<xs:attribute name="signet" type="xs:string" use="required"/>
@@ -773,9 +760,9 @@
 	<xs:complexType name="DispelDebuffPhysicalEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-				<xs:attribute name="dpower" type="xs:int" />
-        <xs:attribute name="power" type="xs:int" />
-        <xs:attribute name="dispel_level" type="xs:int" />
+				<xs:attribute name="dpower" type="xs:int"/>
+				<xs:attribute name="power" type="xs:int"/>
+				<xs:attribute name="dispel_level" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -787,18 +774,18 @@
 	<xs:complexType name="DispelDebuffEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-				<xs:attribute name="dpower" type="xs:int" />
-        <xs:attribute name="power" type="xs:int" />
-        <xs:attribute name="dispel_level" type="xs:int" />
+				<xs:attribute name="dpower" type="xs:int"/>
+				<xs:attribute name="power" type="xs:int"/>
+				<xs:attribute name="dispel_level" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="DispelBuffEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-				<xs:attribute name="dpower" type="xs:int" />
-        <xs:attribute name="power" type="xs:int" />
-        <xs:attribute name="dispel_level" type="xs:int" />
+				<xs:attribute name="dpower" type="xs:int"/>
+				<xs:attribute name="power" type="xs:int"/>
+				<xs:attribute name="dispel_level" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -815,11 +802,32 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="DispelEffect">
+		<xs:complexContent>
+			<xs:extension base="Effect">
+				<xs:sequence minOccurs="0" maxOccurs="1">
+					<xs:element name="effectids" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="effecttype" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="slottype" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="dispeltype" type="DispelType"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="SummonEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
 				<xs:attribute name="npc_id" type="xs:int"/>
 				<xs:attribute name="time" type="xs:int"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SummonMultiEffect">
+		<xs:complexContent>
+			<xs:extension base="SummonEffect">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="summon" type="SummonEffect" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -853,17 +861,17 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="SummonSkillAreaEffect">
-    <xs:complexContent>
-      <xs:extension base="SummonServantEffect">
+		<xs:complexContent>
+			<xs:extension base="SummonServantEffect">
       </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="SummonTotemEffect">
-    <xs:complexContent>
-      <xs:extension base="SummonServantEffect">
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SummonTotemEffect">
+		<xs:complexContent>
+			<xs:extension base="SummonServantEffect">
       </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="RecallInstantEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect"/>
@@ -879,7 +887,7 @@
 	<xs:complexType name="FearEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-			 <xs:attribute name="resistchance" type="xs:int"/>
+				<xs:attribute name="resistchance" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -891,9 +899,9 @@
 	<xs:complexType name="DispelDebuffMentalEffect">
 		<xs:complexContent>
 			<xs:extension base="Effect">
-				<xs:attribute name="dpower" type="xs:int" />
-        <xs:attribute name="power" type="xs:int" />
-        <xs:attribute name="dispel_level" type="xs:int" />
+				<xs:attribute name="dpower" type="xs:int"/>
+				<xs:attribute name="power" type="xs:int"/>
+				<xs:attribute name="dispel_level" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -984,13 +992,13 @@
 	</xs:complexType>
 	<xs:complexType name="DispelBuffCounterAtkEffect">
 		<xs:complexContent>
-		  <xs:extension base="DamageEffect">
-		   <xs:attribute name="dpower" type="xs:int" />
-       <xs:attribute name="power" type="xs:int" />
-       <xs:attribute name="dispel_level" type="xs:int" />
-			 <xs:attribute name="hitdelta" type="xs:int"/>
-			 <xs:attribute name="hitvalue" type="xs:int"/>
-		  </xs:extension>
+			<xs:extension base="DamageEffect">
+				<xs:attribute name="dpower" type="xs:int"/>
+				<xs:attribute name="power" type="xs:int"/>
+				<xs:attribute name="dispel_level" type="xs:int"/>
+				<xs:attribute name="hitdelta" type="xs:int"/>
+				<xs:attribute name="hitvalue" type="xs:int"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="FpAttackEffect">
@@ -1088,7 +1096,7 @@
 	<xs:complexType name="HealCastorOnTargetDeadEffect">
 		<xs:complexContent>
 			<xs:extension base="AbstractHealEffect">
-			  <xs:attribute name="type" type="HealType" use="required"/>
+				<xs:attribute name="type" type="HealType" use="required"/>
 				<xs:attribute name="range" type="xs:float" use="required"/>
 				<xs:attribute name="healparty" type="xs:boolean"/>
 			</xs:extension>
@@ -1149,7 +1157,7 @@
 	<xs:complexType name="EvadeEffect">
 		<xs:complexContent>
 			<xs:extension base="DispelEffect">
-			 <xs:attribute name="dispel_level" type="xs:int" />
+				<xs:attribute name="dispel_level" type="xs:int"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1203,7 +1211,7 @@
 	</xs:simpleType>
 	<xs:complexType name="Change">
 		<xs:sequence>
-			<xs:element name="conditions" type="Conditions"	minOccurs="0" maxOccurs="1"/>
+			<xs:element name="conditions" type="Conditions" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 		<xs:attribute name="stat" type="modifiersenum" use="required"/>
 		<xs:attribute name="func" type="StatFunc" use="required"/>
@@ -1324,9 +1332,9 @@
 	</xs:simpleType>
 	<xs:simpleType name="StigmaType">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="NONE" />
-			<xs:enumeration value="BASIC" />
-			<xs:enumeration value="ADVANCED" />
+			<xs:enumeration value="NONE"/>
+			<xs:enumeration value="BASIC"/>
+			<xs:enumeration value="ADVANCED"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="SkillTargetRace">
@@ -1432,20 +1440,18 @@
 			<xs:enumeration value="HIDE20"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
-  <xs:simpleType name="DispelCategoryType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="NONE"/>
-      <xs:enumeration value="ALL"/>
-      <xs:enumeration value="BUFF"/>
-      <xs:enumeration value="DEBUFF_MENTAL"/>
-      <xs:enumeration value="DEBUFF_PHYSICAL"/>
-      <xs:enumeration value="EXTRA"/>
-      <xs:enumeration value="NEVER"/>
-      <xs:enumeration value="NPC_BUFF"/>
-      <xs:enumeration value="NPC_DEBUFF_PHYSICAL"/>
-      <xs:enumeration value="STUN"/>
-    </xs:restriction>
-  </xs:simpleType>
-  
+	<xs:simpleType name="DispelCategoryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NONE"/>
+			<xs:enumeration value="ALL"/>
+			<xs:enumeration value="BUFF"/>
+			<xs:enumeration value="DEBUFF_MENTAL"/>
+			<xs:enumeration value="DEBUFF_PHYSICAL"/>
+			<xs:enumeration value="EXTRA"/>
+			<xs:enumeration value="NEVER"/>
+			<xs:enumeration value="NPC_BUFF"/>
+			<xs:enumeration value="NPC_DEBUFF_PHYSICAL"/>
+			<xs:enumeration value="STUN"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Aion Lightning 2.7</name>
+	<name>AL-Game</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -24,17 +24,17 @@
 		<link>
 			<name>database</name>
 			<type>2</type>
-			<locationURI>PROJECT_LOC/data/scripts/system/database</locationURI>
+			<locationURI>copy_PROJECT_LOC/data/scripts/system/database</locationURI>
 		</link>
 		<link>
 			<name>handlers</name>
 			<type>2</type>
-			<locationURI>PROJECT_LOC/data/scripts/system/handlers</locationURI>
+			<locationURI>copy_PROJECT_LOC/data/scripts/system/handlers</locationURI>
 		</link>
 	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1328723008189</id>
+			<id>0</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -43,7 +43,16 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1328722990788</id>
+			<id>0</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.core.resources.regexFilterMatcher</id>
+				<arguments>node_modules|\.git|__CREATED_BY_JAVA_LANGUAGE_SERVER__</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>0</id>
 			<name>data/scripts</name>
 			<type>26</type>
 			<matcher>
@@ -52,7 +61,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1328722990792</id>
+			<id>0</id>
 			<name>data/scripts</name>
 			<type>26</type>
 			<matcher>
@@ -61,4 +70,10 @@
 			</matcher>
 		</filter>
 	</filteredResources>
+	<variableList>
+		<variable>
+			<name>copy_PROJECT_LOC</name>
+			<value>$%7BPARENT-2-ECLIPSE_HOME%7D/Documents/git/Aion/Server/aion-lightning-2.7/aion-lightning-2.7/AL-Game</value>
+		</variable>
+	</variableList>
 </projectDescription>

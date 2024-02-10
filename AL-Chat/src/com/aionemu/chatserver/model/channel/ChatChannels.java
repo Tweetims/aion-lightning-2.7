@@ -312,16 +312,16 @@ public class ChatChannels {
 			addJobChannel(Gender.MALE, PlayerClass.SORCERER, "job_Sorcier");
 			addJobChannel(Gender.MALE, PlayerClass.SPIRIT_MASTER, "job_Spiritualiste");
 			addJobChannel(Gender.MALE, PlayerClass.CHANTER, "job_Aede");
-			addJobChannel(Gender.MALE, PlayerClass.RANGER, "job_Rôdeur");
+			addJobChannel(Gender.MALE, PlayerClass.RANGER, "job_Ranger");
 			addJobChannel(Gender.MALE, PlayerClass.ASSASSIN, "job_Assassin");
 			addJobChannel(Gender.MALE, PlayerClass.CLERIC, "job_Clerc");
 			// Female
 			addJobChannel(Gender.FEMALE, PlayerClass.GLADIATOR, "job_Gladiateur[f:" + '"' + "Gladiatrice" + '"' + "]");
-			addJobChannel(Gender.FEMALE, PlayerClass.TEMPLAR, "job_Templier[f:" + '"' + "Templière" + '"' + "]");
-			addJobChannel(Gender.FEMALE, PlayerClass.SORCERER, "job_Sorcier[f:" + '"' + "Sorcière" + '"' + "]");
+			addJobChannel(Gender.FEMALE, PlayerClass.TEMPLAR, "job_Templier[f:" + '"' + "Templiï¿½re" + '"' + "]");
+			addJobChannel(Gender.FEMALE, PlayerClass.SORCERER, "job_Sorcier[f:" + '"' + "Sorciï¿½re" + '"' + "]");
 			addJobChannel(Gender.FEMALE, PlayerClass.SPIRIT_MASTER, "job_Spiritualiste");
-			addJobChannel(Gender.FEMALE, PlayerClass.CHANTER, "job_Aède");
-			addJobChannel(Gender.FEMALE, PlayerClass.RANGER, "job_Rôdeur[f:" + '"' + "Rôdeuse" + '"' + "]");
+			addJobChannel(Gender.FEMALE, PlayerClass.CHANTER, "job_Aï¿½de");
+			addJobChannel(Gender.FEMALE, PlayerClass.RANGER, "job_Rï¿½deur[f:" + '"' + "Rï¿½deuse" + '"' + "]");
 			addJobChannel(Gender.FEMALE, PlayerClass.ASSASSIN, "job_Assassin[f:" + '"' + "Assassine" + '"' + "]");
 			addJobChannel(Gender.FEMALE, PlayerClass.CLERIC, "job_Clerc");
 		}
