@@ -156,9 +156,11 @@ public class TargetRangeProperty {
 								continue;
 							if (MathUtil.isIn3dRange(effector, player, distance + 1)) {
 								effectedList.add(player);
-								Summon aMemberSummon = player.getSummon();
-								if (aMemberSummon != null)
-									effectedList.add(aMemberSummon);
+								Summon[] aMemberSummons = player.getSummons();
+								if (aMemberSummons != null)
+									for (Summon aMemberSummon: aMemberSummons) {
+										effectedList.add(aMemberSummon);
+									}
 							}
 						}
 					}
@@ -171,9 +173,11 @@ public class TargetRangeProperty {
 								continue;
 							if (MathUtil.isIn3dRange(effector, member, distance + 1)) {
 								effectedList.add(member);
-								Summon aMemberSummon = member.getSummon();
-								if (aMemberSummon != null)
-									effectedList.add(aMemberSummon);
+								Summon[] aMemberSummons = member.getSummons();
+								if (aMemberSummons != null)
+									for (Summon aMemberSummon: aMemberSummons) {
+										effectedList.add(aMemberSummon);
+									}
 							}
 						}
 					}

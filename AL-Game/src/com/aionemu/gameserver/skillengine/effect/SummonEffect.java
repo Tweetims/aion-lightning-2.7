@@ -46,19 +46,21 @@ public class SummonEffect extends EffectTemplate {
 	@Override
 	public void applyEffect(Effect effect) {
 		Creature effected = effect.getEffected();
-		effected.getController().createSummon(npcId, effect.getSkillId(), effect.getSkillLevel());
+		effected.getController().createSummon(npcId, effect.getSkillId(), effect.getSkillLevel(), false);
 		if ((time > 0) && (effect.getEffected() instanceof Player)) {
 			final Player effector = (Player)effect.getEffected();
-			final Summon summon = effector.getSummon();
-			Future<?> task = ThreadPoolManager.getInstance().schedule(new Runnable() {
+			final Summon[] summons = effector.getSummons();
+			for (final Summon summon: summons) {
+				Future<?> task = ThreadPoolManager.getInstance().schedule(new Runnable() {
 
-				@Override
-				public void run() {
-					if ((summon != null) && (summon.isSpawned()))
-						summon.getController().release(UnsummonType.COMMAND);
-				}
-			}, time * 1000);
-			summon.getController().addTask(TaskId.DESPAWN, task);
+					@Override
+					public void run() {
+						if ((summon != null) && (summon.isSpawned()))
+							summon.getController().release(UnsummonType.COMMAND);
+					}
+				}, time * 1000);
+				summon.getController().addTask(TaskId.DESPAWN, task);
+			}
 		}
 	}
 

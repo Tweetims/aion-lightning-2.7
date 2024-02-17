@@ -89,43 +89,45 @@ public class CM_SUMMON_MOVE extends AionClientPacket {
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-		Summon summon = player.getSummon();
-		if (summon == null)
+		Summon[] summons = player.getSummons();
+		if (summons == null || summons.length == 0)
 			return;
-		if (summon.getEffectController().isUnderFear())
-			return;
-		SummonMoveController m = summon.getMoveController();
-		m.movementMask = type;
+		for (Summon summon: summons) {
+			if (summon.getEffectController().isUnderFear())
+				return;
+			SummonMoveController m = summon.getMoveController();
+			m.movementMask = type;
 
-		if ((type & MovementMask.GLIDE) == MovementMask.GLIDE) {
-			m.glideFlag = glideFlag;
-		}
-
-		if (type == 0) {
-			summon.getController().onStopMove();
-		}
-		else if ((type & MovementMask.STARTMOVE) == MovementMask.STARTMOVE) {
-			if ((type & MovementMask.MOUSE) == 0) {
-				m.vectorX = vectorX;
-				m.vectorY = vectorY;
-				m.vectorZ = vectorZ;
+			if ((type & MovementMask.GLIDE) == MovementMask.GLIDE) {
+				m.glideFlag = glideFlag;
 			}
-			summon.getMoveController().setNewDirection(x2, y2, z2, heading);
-			summon.getController().onStartMove();
-		}
-		else
-			summon.getController().onMove();
 
-		if ((type & MovementMask.VEHICLE) == MovementMask.VEHICLE) {
-			m.unk1 = unk1;
-			m.unk2 = unk2;
-			m.vehicleX = vehicleX;
-			m.vehicleY = vehicleY;
-			m.vehicleZ = vehicleZ;
-		}
-		World.getInstance().updatePosition(summon, x, y, z, heading);
+			if (type == 0) {
+				summon.getController().onStopMove();
+			}
+			else if ((type & MovementMask.STARTMOVE) == MovementMask.STARTMOVE) {
+				if ((type & MovementMask.MOUSE) == 0) {
+					m.vectorX = vectorX;
+					m.vectorY = vectorY;
+					m.vectorZ = vectorZ;
+				}
+				summon.getMoveController().setNewDirection(x2, y2, z2, heading);
+				summon.getController().onStartMove();
+			}
+			else
+				summon.getController().onMove();
 
-		if ((type & MovementMask.STARTMOVE) == MovementMask.STARTMOVE || type == 0)
-			PacketSendUtility.broadcastPacket(summon, new SM_MOVE(summon));
+			if ((type & MovementMask.VEHICLE) == MovementMask.VEHICLE) {
+				m.unk1 = unk1;
+				m.unk2 = unk2;
+				m.vehicleX = vehicleX;
+				m.vehicleY = vehicleY;
+				m.vehicleZ = vehicleZ;
+			}
+			World.getInstance().updatePosition(summon, x, y, z, heading);
+
+			if ((type & MovementMask.STARTMOVE) == MovementMask.STARTMOVE || type == 0)
+				PacketSendUtility.broadcastPacket(summon, new SM_MOVE(summon));
+		}
 	}
 }

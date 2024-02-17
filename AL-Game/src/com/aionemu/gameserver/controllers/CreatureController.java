@@ -521,12 +521,8 @@ public abstract class CreatureController<T extends Creature> extends VisibleObje
 	 * @param npcId
 	 * @param skillLevel
 	 */
-	public void createSummon(int npcId, int skillId, int skillLevel) {
+	public void createSummon(int npcId, int skillId, int skillLevel, boolean releaseAll) {
 		// TODO Auto-generated method stub
-	}
-	
-	public void createSummons(int npcId, int skillId, int skillLevel, int count) {
-		
 	}
 
 	public void setIsUnderShield(boolean value) {

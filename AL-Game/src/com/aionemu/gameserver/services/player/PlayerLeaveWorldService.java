@@ -30,6 +30,7 @@ import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.dao.PlayerEffectsDAO;
 import com.aionemu.gameserver.dao.PlayerLifeStatsDAO;
 import com.aionemu.gameserver.dao.PlayerRankDAO;
+import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.items.storage.StorageType;
 import com.aionemu.gameserver.model.team2.alliance.PlayerAllianceService;
@@ -127,8 +128,10 @@ public class PlayerLeaveWorldService {
                    TvtService.getInstance().unRegPlayer(player);
                 }*/
 
-		if (player.getSummon() != null)
-			player.getSummon().getController().release(UnsummonType.LOGOUT);
+		if (player.getSummons() != null && player.getSummons().length > 0)
+			for (Summon summon: player.getSummons()) {
+				summon.getController().release(UnsummonType.LOGOUT);
+			}
 
 		PetSpawnService.dismissPet(player, true);
 

@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.network.aion.clientpackets;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,23 +61,23 @@ public class CM_SUMMON_ATTACK extends AionClientPacket {
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-
-		Summon summon = player.getSummon();
-		if (summon == null) {
+		log.warn("attack from: " + summonObjId);
+		Summon[] summons = player.getSummons();
+		if (summons == null || summons.length == 0) {
 			log.warn("summon attack without active summon on "+player.getName()+".");
 			return;
 		}
 		
-		if(summon.getObjectId() != summonObjId) {
-			log.warn("summon attack from a different summon instance on "+player.getName()+".");
-			return;
+		for (Summon summon: summons) {
+			if (summon.getObjectId() != summonObjId)
+				return;
+			
+			VisibleObject obj = summon.getKnownList().getObject(targetObjId);
+			if(obj != null && obj instanceof Creature) {
+				summon.getController().attackTarget((Creature)obj, time);
+			}
+			else
+				log.warn("summon attack on a wrong target on "+player.getName());
 		}
-		
-		VisibleObject obj = summon.getKnownList().getObject(targetObjId);
-		if(obj != null && obj instanceof Creature) {
-			summon.getController().attackTarget((Creature)obj, time);
-		}
-		else
-			log.warn("summon attack on a wrong target on "+player.getName());
 	}
 }

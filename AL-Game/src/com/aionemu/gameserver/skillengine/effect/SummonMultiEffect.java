@@ -15,6 +15,7 @@
  *  along with aion-unique.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.gameserver.skillengine.effect;
+import com.aionemu.gameserver.skillengine.effect.SummonEffect;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -44,28 +45,34 @@ public class SummonMultiEffect extends EffectTemplate {
 	@XmlElements({
 		@XmlElement(name = "summon", type = SummonEffect.class)
 	})
-	protected List<Summon> summons;
+	protected List<SummonEffect> summons;
+
+	@XmlAttribute(name = "time", required = true)
+	protected int time; // in seconds
 
 	@Override
 	public void applyEffect(Effect effect) {
 		Creature effected = effect.getEffected();
-		System.out.println(summons);
-		/*
-		effected.getController().createSummon(npcId, effect.getSkillId(), effect.getSkillLevel());
+		int i = 0;
+		for (SummonEffect summon: summons) {
+			effected.getController().createSummon(summon.npcId, effect.getSkillId(), effect.getSkillLevel(), i == 0 ? true : false);
+			i++;
+		}
 		if ((time > 0) && (effect.getEffected() instanceof Player)) {
 			final Player effector = (Player)effect.getEffected();
-			final Summon summon = effector.getSummon();
-			Future<?> task = ThreadPoolManager.getInstance().schedule(new Runnable() {
+			final Summon[] summons = effector.getSummons();
+			for (final Summon summon: summons) {
+				Future<?> task = ThreadPoolManager.getInstance().schedule(new Runnable() {
 
-				@Override
-				public void run() {
-					if ((summon != null) && (summon.isSpawned()))
-						summon.getController().release(UnsummonType.COMMAND);
-				}
-			}, time * 1000);
-			summon.getController().addTask(TaskId.DESPAWN, task);
+					@Override
+					public void run() {
+						if ((summon != null) && (summon.isSpawned()))
+							summon.getController().release(UnsummonType.COMMAND);
+					}
+				}, time * 1000);
+				summon.getController().addTask(TaskId.DESPAWN, task);
+			}
 		}
-		*/
 	}
 
 	@Override

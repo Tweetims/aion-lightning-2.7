@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aionemu.gameserver.model.DuelResult;
 import com.aionemu.gameserver.model.gameobjects.Creature;
+import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.RequestResponseHandler;
 import com.aionemu.gameserver.model.templates.zone.ZoneType;
@@ -211,31 +212,41 @@ public class DuelService {
 			/**
 			 * cancel attacking winner by summon
 			 */
-			if (player.getSummon() != null) {
-				//if (player.getSummon().getTarget().isTargeting(opponnentId))
-				//SummonsService.doMode(SummonMode.GUARD, player.getSummon(), UnsummonType.UNSPECIFIED);
-				player.getSummon().getController().guardMode();
+			Summon[] playerSummons = player.getSummons();
+			if (playerSummons != null && playerSummons.length > 0) {
+				for (Summon summon: playerSummons) {
+					//if (player.getSummon().getTarget().isTargeting(opponnentId))
+					//SummonsService.doMode(SummonMode.GUARD, player.getSummon(), UnsummonType.UNSPECIFIED);
+					summon.getController().guardMode();
+				}
 			}
 			
 			/**
 			 * cancel attacking loser by summon
 			 */
-			if (opponent.getSummon() != null) {
-				opponent.getSummon().getController().guardMode();
+			Summon[] opponentSummons = opponent.getSummons();
+			if (opponentSummons != null && opponentSummons.length > 0) {
+				for (Summon summon: opponentSummons) {
+					summon.getController().guardMode();
+				}
 			}
 			
 			/**
 			 * cancel attacking winner by summoned object
 			 */
-			if (player.getSummon() != null) {
-				player.getSummon().getController().cancelCurrentSkill();
+			if (playerSummons != null && playerSummons.length > 0) {
+				for (Summon summon: playerSummons) {
+					summon.getController().cancelCurrentSkill();
+				}
 			}
 			
 			/**
 			 * cancel attacking loser by summoned object
 			 */
-			if (opponent.getSummon() != null) {
-				opponent.getSummon().getController().cancelCurrentSkill();
+			if (opponentSummons != null && opponentSummons.length > 0) {
+				for (Summon summon: opponentSummons) {
+					summon.getController().cancelCurrentSkill();
+				}
 			}
 
 			PacketSendUtility.sendPacket(opponent, SM_DUEL.SM_DUEL_RESULT(DuelResult.DUEL_WON, player.getName()));

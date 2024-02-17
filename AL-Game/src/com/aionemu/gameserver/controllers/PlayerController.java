@@ -64,6 +64,7 @@ import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneName;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Future;
 
@@ -208,8 +209,9 @@ public class PlayerController extends CreatureController<Player> {
 		/**
 		 * Release summon
 		 */
-		Summon summons = player.getSummon();
-			summons.getController().release(UnsummonType.UNSPECIFIED);
+		for (Summon summon: player.getSummons()) {
+			summon.getController().release(UnsummonType.UNSPECIFIED);
+		}
 		
 		player.getController().cancelCurrentSkill();
 		boolean hasSelfRezEffect = getOwner().haveSelfRezEffect();
@@ -714,35 +716,33 @@ public class PlayerController extends CreatureController<Player> {
 	}
 
 	@Override
-	public void createSummon(int npcId, int skillId, int skillLevel) {
+	public void createSummon(int npcId, int skillId, int skillLevel, boolean releaseAll) {
 		Player master = getOwner();
-		if (master.getSummon() != null) {
-			master.getSummon().getController().delete();
-			master.getSummon().setMaster(null);
-			master.setSummon(null);
+		if ((master.getSummons() != null && master.getSummons().length > 0) && releaseAll) {
+			for (Summon summon: master.getSummons()) {
+				summon.getController().delete();
+				summon.setMaster(null);
+				master.setSummons(null);
+			}
 		}
-		Summon summons;
-		summons = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
-		master.setSummon(summons);
-		PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summons));
-		PacketSendUtility.broadcastPacket(summons, new SM_EMOTION(summons, EmotionType.START_EMOTE2));
-		PacketSendUtility.broadcastPacket(summons, new SM_SUMMON_UPDATE(summons));
-	}
-	
-	@Override
-	public void createSummons(int npcId, int skillId, int skillLevel, int count) {
-		Player master = getOwner();
-		if (master.getSummon() != null) {
-			master.getSummon().getController().delete();
-			master.getSummon().setMaster(null);
-			master.setSummon(null);
+		
+		Summon summon;
+		summon = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
+		if (releaseAll) {
+			master.setSummons(new Summon[]{summon});
+			PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summon));
 		}
-		Summon summons;
-		summons = VisibleObjectSpawner.spawnSummon(master, npcId, skillId, skillLevel);
-		master.setSummon(summons);
-		PacketSendUtility.sendPacket(master, new SM_SUMMON_PANEL(summons));
-		PacketSendUtility.broadcastPacket(summons, new SM_EMOTION(summons, EmotionType.START_EMOTE2));
-		PacketSendUtility.broadcastPacket(summons, new SM_SUMMON_UPDATE(summons));
+		else{
+			if (master.getSummons() == null){
+				master.setSummons(new Summon[]{summon});
+			}
+				
+			Summon[] newSummons = Arrays.copyOf(master.getSummons(), master.getSummons().length + 1);
+			newSummons[master.getSummons().length] = summon;
+			master.setSummons(newSummons);
+		}
+		PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, EmotionType.START_EMOTE2));
+		PacketSendUtility.broadcastPacket(summon, new SM_SUMMON_UPDATE(summon));
 	}
 
 	public boolean addItems(int itemId, int count) {

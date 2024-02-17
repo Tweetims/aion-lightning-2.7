@@ -100,7 +100,7 @@ public class SummonController extends CreatureController<Summon> {
 
 				owner.getController().delete();
 				owner.setMaster(null);
-				master.setSummon(null);
+				master.setSummons(null);
 
 				switch (unsummonType) {
 					case COMMAND:

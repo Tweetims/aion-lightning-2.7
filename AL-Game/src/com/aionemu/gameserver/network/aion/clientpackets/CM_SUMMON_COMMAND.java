@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.network.aion.clientpackets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.gameserver.controllers.SummonController.UnsummonType;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.model.gameobjects.Summon;
@@ -24,6 +27,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
 
+
 /**
  * @author ATracer
  */
@@ -31,6 +35,10 @@ public class CM_SUMMON_COMMAND extends AionClientPacket {
 
 	private int mode;
 	private int targetObjId;
+	private int id1;
+	private int id2;
+	private int id3;
+	private int id4;
 
 	public CM_SUMMON_COMMAND(int opcode, State state, State... restStates) {
 		super(opcode, state, restStates);
@@ -39,33 +47,36 @@ public class CM_SUMMON_COMMAND extends AionClientPacket {
 	@Override
 	protected void readImpl() {
 		mode = readC();
-		readD();
-		readD();
+		id1 = readD();
+		id2 = readD();
 		targetObjId = readD();
 	}
 
 	@Override
 	protected void runImpl() {
 		Player activePlayer = getConnection().getActivePlayer();
-		Summon summon = activePlayer.getSummon();
-		if (summon != null) {
-			switch (mode) {
-				case 0:
-					VisibleObject obj = summon.getKnownList().getObject(targetObjId);
-					if (obj != null && obj instanceof Creature) {
-						summon.getController().attackMode();
-					}
-					break;
-				case 1:
-					summon.getController().guardMode();
-					break;
-				case 2:
-					summon.getController().restMode();
-					break;
-				case 3:
-					summon.getController().release(UnsummonType.COMMAND);
-					break;
-
+		Summon[] summons = activePlayer.getSummons();
+		//log.warn(summonObjId);
+		if (summons != null && summons.length > 0) {
+			for (Summon summon: summons) {
+				switch (mode) {
+					case 0:
+						VisibleObject obj = summon.getKnownList().getObject(targetObjId);
+						if (obj != null && obj instanceof Creature) {
+							//log.warn(summon.getObjectId());
+							summon.getController().attackMode();
+						}
+						break;
+					case 1:
+						summon.getController().guardMode();
+						break;
+					case 2:
+						summon.getController().restMode();
+						break;
+					case 3:
+						summon.getController().release(UnsummonType.COMMAND);
+						break;
+				}
 			}
 		}
 	}

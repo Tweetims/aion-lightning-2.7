@@ -311,9 +311,11 @@ public class DarkPoetaInstance extends GeneralInstanceHandler {
 
 	@Override
 	public boolean onDie(final Player player, Creature lastAttacker) {
-		Summon summon = player.getSummon();
-		if (summon != null) {
-			summon.getController().release(UnsummonType.UNSPECIFIED);
+		Summon[] summons = player.getSummons();
+		if (summons != null) {
+			for (Summon summon: summons) {
+				summon.getController().release(UnsummonType.UNSPECIFIED);
+			}
 		}
 
 		PacketSendUtility.broadcastPacket(player, new SM_EMOTION(player, EmotionType.DIE, 0, lastAttacker == null ? 0

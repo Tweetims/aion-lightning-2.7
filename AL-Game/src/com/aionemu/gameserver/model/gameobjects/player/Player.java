@@ -167,7 +167,7 @@ public class Player extends Creature {
 	private CraftingTask craftingTask;
 	private int flightTeleportId;
 	private int flightDistance;
-	private Summon summon;
+	private Summon[] summons;
 	private Pet toyPet;
 	private Kisk kisk;
 	private boolean isResByPlayer = false;
@@ -1356,16 +1356,31 @@ public class Player extends Creature {
 	/**
 	 * @return the summon
 	 */
-	public Summon getSummon() {
-		return summon;
+	public Summon[] getSummons() {
+		return summons;
 	}
+	
+	/**
+	 * @return the summonIds
+	 */
+	public int[] getSummonIds() {
+		if (summons == null)
+			return new int[0];
+		int[] summonIds = new int[summons.length];
+		for (int i=0; i<summons.length; i++) {
+			summonIds[i] = summons[i].getObjectId();
+		}
+		return summonIds;
+	}
+
+	
 
 	/**
 	 * @param summon
 	 *          the summon to set
 	 */
-	public void setSummon(Summon summon) {
-		this.summon = summon;
+	public void setSummons(Summon[] summons) {
+		this.summons = summons;
 	}
 
 	/**

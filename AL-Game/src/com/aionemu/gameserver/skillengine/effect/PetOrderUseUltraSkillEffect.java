@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SUMMON_USESKILL;
 import com.aionemu.gameserver.skillengine.model.Effect;
@@ -41,24 +42,27 @@ public class PetOrderUseUltraSkillEffect extends EffectTemplate {
 	@Override
 	public void applyEffect(Effect effect) {
 		Player effector = (Player) effect.getEffector();
+		Summon[] summons = effector.getSummons();
 		
-		if(effector.getSummon() == null) {
+		if(summons == null || summons.length > 0) {
 			return;
 		}
 		
-		int effectorId = effector.getSummon().getObjectId();
+		for (Summon summon: summons) {
+			int effectorId = summon.getObjectId();
 
-		int npcId = effector.getSummon().getNpcId();
-		int orderSkillId = effect.getSkillId();
+			int npcId = summon.getNpcId();
+			int orderSkillId = effect.getSkillId();
 
-		int petUseSkillId = DataManager.PET_SKILL_DATA.getPetOrderSkill(orderSkillId, npcId);
-		int targetId = effect.getEffected().getObjectId();
-		
-		// Handle automatic release if skill expects so
-		if (release)
-			effector.getSummon().getController().setReleaseAfterSkill(petUseSkillId);
+			int petUseSkillId = DataManager.PET_SKILL_DATA.getPetOrderSkill(orderSkillId, npcId);
+			int targetId = effect.getEffected().getObjectId();
+			
+			// Handle automatic release if skill expects so
+			if (release)
+				summon.getController().setReleaseAfterSkill(petUseSkillId);
 
-		PacketSendUtility.sendPacket(effector, new SM_SUMMON_USESKILL(effectorId, petUseSkillId, 1, targetId));
+			PacketSendUtility.sendPacket(effector, new SM_SUMMON_USESKILL(effectorId, petUseSkillId, 1, targetId));	
+		}
 	}
 
 	@Override

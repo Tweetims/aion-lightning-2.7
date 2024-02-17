@@ -162,9 +162,11 @@ public class TvTInstance extends GeneralInstanceHandler {
 
     @Override
     public boolean onDie(Player player, Creature lastAttacker) {
-        Summon summon = player.getSummon();
-        if (summon != null) {
-            summon.getController().release(SummonController.UnsummonType.UNSPECIFIED);
+        Summon[] summons = player.getSummons();
+        if (summons != null && summons.length > 0) {
+        	for (Summon summon: summons) {
+                summon.getController().release(SummonController.UnsummonType.UNSPECIFIED);
+        	}
         }
         if (player.isInState(CreatureState.FLYING) || player.isInState(CreatureState.GLIDING)) {
             player.unsetState(CreatureState.FLYING);
@@ -177,7 +179,8 @@ public class TvTInstance extends GeneralInstanceHandler {
         PacketSendUtility.sendPacket(player, new SM_DIE(false, false, 0, 8));
         player.getObserveController().notifyDeathObservers(player);
         if (lastAttacker instanceof Summon) {
-            addScore(((Player) lastAttacker).getSummon().getMaster());
+            if (((Player) lastAttacker).getSummons() != null && ((Player) lastAttacker).getSummons().length > 0)
+            	addScore(((Player) lastAttacker).getSummons()[0].getMaster());
         } else if (lastAttacker instanceof Player) {
             addScore((Player) lastAttacker);
         } else if (lastAttacker instanceof Npc) {

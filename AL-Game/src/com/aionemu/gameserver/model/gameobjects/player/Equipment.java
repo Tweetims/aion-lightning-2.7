@@ -220,9 +220,11 @@ public class Equipment {
 	}
 
 	private void tryUpdateSummonStats() {
-		Summon summon = owner.getSummon();
-		if (summon != null) {
-			summon.getGameStats().updateStatsAndSpeedVisually();
+		Summon[] summons = owner.getSummons();
+		if (summons != null) {
+			for (Summon summon: summons) {
+				summon.getGameStats().updateStatsAndSpeedVisually();
+			}
 		}
 	}
 

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.controllers.attack.AggroInfo;
 import com.aionemu.gameserver.model.gameobjects.Creature;
+import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.skillengine.model.Effect;
 
@@ -35,13 +36,15 @@ public class SwitchHostileEffect extends EffectTemplate {
 		Creature effected = effect.getEffected();
 		Creature effector = effect.getEffector();
 
-		if (((Player) effector).getSummon() != null) {
+		if (((Player) effector).getSummons() != null && (((Player) effector).getSummons().length > 0)) {
 			AggroInfo aggroInfo = effected.getAggroList().getAggroInfo(effector);
-			if (aggroInfo != null && aggroInfo.getAttacker() == ((Player) effector).getSummon()) {
-				int hate = aggroInfo.getHate();
-				effected.getAggroList().stopHating(((Player) effector).getSummon());
-				effected.getAggroList().remove(((Player) effector).getSummon());
-				effected.getAggroList().addHate(effector, hate);
+			for (Summon summon: ((Player) effector).getSummons()) {
+				if (aggroInfo != null && aggroInfo.getAttacker() == summon) {
+					int hate = aggroInfo.getHate();
+					effected.getAggroList().stopHating(summon);
+					effected.getAggroList().remove(summon);
+					effected.getAggroList().addHate(effector, hate);
+				}
 			}
 		}
 	}

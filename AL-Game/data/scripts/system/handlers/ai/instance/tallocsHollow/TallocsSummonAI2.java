@@ -39,14 +39,14 @@ public class TallocsSummonAI2 extends NpcAI2 {
 	public boolean onDialogSelect(Player player, int dialogId, int questId) {
 		if (dialogId == 59 && !isTransformed) {
 			PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(getObjectId(), 0));
-			if (player.getSummon() != null) { // to do remove
+			if (player.getSummons() != null) { // to do remove
 				PacketSendUtility.sendMessage(player, "please dismiss your summon first.");
 				return true;
 			}
 
 			Summon[] summons = new Summon[1];
 			Summon summon = new Summon(getObjectId(), new SummonController(), getSpawnTemplate(), getObjectTemplate(), getObjectTemplate().getLevel());
-			player.setSummon(summons[0]);
+			player.setSummons(summons);
 			summon.setMaster(player);
 			summon.setTarget(player.getTarget());
 			summon.setKnownlist(getKnownList());

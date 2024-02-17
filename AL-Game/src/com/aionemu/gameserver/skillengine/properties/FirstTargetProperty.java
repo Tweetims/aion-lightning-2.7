@@ -92,9 +92,11 @@ public class FirstTargetProperty {
 			case MYPET:
 				Creature effector = skill.getEffector();
 				if (effector instanceof Player) {
-					Summon summon = ((Player) effector).getSummon();
-					if (summon != null)
-						skill.setFirstTarget(summon);
+					Summon[] summons = ((Player) effector).getSummons();
+					if (summons != null)
+						for (Summon summon: summons) {
+							skill.setFirstTarget(summon);
+						}
 					else
 						return false;
 				}
